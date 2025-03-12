@@ -21,7 +21,12 @@ sed -i -e '$a /etc/bench.log' \
 sed -i -e '/^\/etc\/profile/d' \
         -e '/^\/etc\/shinit/d' \
         package/base-files/Makefile
-sed -i "s/192.168.1/10.0.0/" package/base-files/files/bin/config_generate
+# 修改为旁路由IP和网关
+sed -i "s/192.168.1/192.168.10/" package/base-files/files/bin/config_generate
+cat << EOF >> package/base-files/files/bin/config_generate
+    set network.lan.ipaddr='192.168.10.2'
+    set network.lan.gateway='192.168.10.1'
+EOF
 
 wget -N https://github.com/immortalwrt/immortalwrt/raw/refs/heads/openwrt-24.10/package/network/utils/nftables/patches/002-nftables-add-fullcone-expression-support.patch -P package/network/utils/nftables/patches/
 wget -N https://github.com/immortalwrt/immortalwrt/raw/refs/heads/openwrt-24.10/package/network/utils/nftables/patches/001-drop-useless-file.patch -P package/network/utils/nftables/patches/
